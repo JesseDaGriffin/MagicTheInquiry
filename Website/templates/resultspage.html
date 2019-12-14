@@ -1,0 +1,102 @@
+{% extends "template.html" %}
+{% block nav %}
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">MTI</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('index') }}">Search</a>
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Results</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('deck') }}">Deck Builder</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('graph') }}">Stats</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+{% endblock %}
+{% block content %}
+  <div class="container-fluid bg-3 text-center center-container">
+    {% if results == [] %}
+      <h1>No results for search of "{{ query }}"</h1>
+    {% elif not query.isspace() and query != "" %}
+      <h3>You searched for "{{ query }}"</h3><br>
+    {% endif %}
+    {% if total > 0 %}
+      <h3>{{index}} / {{total}}</h3>
+    {% endif %}
+    <div class="row">
+      {% for name, image, card_type, cmc in results %}
+        <div class="col-sm-3 mb-4">
+          <h4>{{ name }}</h4>
+          <img class="mb-2" src="{{ image }}" style="width:85%" alt="Image">
+          <div class="centrebuttons">
+            <form action="{{ url_for('success') }}">
+              <label for="quantity"></label>
+                <select class="form-control" name="quantity" id="quantity">
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                </select>
+                <input type="hidden" name="image" value="{{ image }}" />
+                <input type="hidden" name="card_type" value="{{ card_type }}" />
+                <input type="hidden" name="cmc" value="{{ cmc }}" />
+                {% if name in deck %}
+                  <div style="margin-bottom: -2px; font-size: 13px; margin-top: 3px;">
+                    Deck Count: {{ deck[name][0] }}
+                    <!-- {% for count in range(deck[name][0]) %}
+                      *
+                    {% endfor %} -->
+                  </div>
+                {% endif %}
+                <button type="submit" class="btn btn-success" name="name" value="{{ name }}">Add to Deck</button>
+            </form>
+            <a class="btn btn-sm btn-secondary" href="{{ urls[name] }}" target="_blank">Shop</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% if total > 1 %}
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        {% if page != 1 %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for('additional_pages', page=page - 2, query2=search2) }}" tabindex="-1">Previous</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">Previous</a>
+          </li>
+        {% endif %}
+        {% for x in range(page - 3, page + 3) %}
+          {% if x >= 0 and x <= total - 1 %}
+            {% if x != page - 1 %}
+              <li class="page-item"><a class="page-link" href="{{ url_for('additional_pages', page=x, query2=search2) }}">{{x+1}}</a></li>
+            {% else %}
+              <li class="page-item active"><a class="page-link" href="{{ url_for('additional_pages', page=x, query2=search2) }}">{{x+1}}</a></li>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+        {% if page != total %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for('additional_pages', page=page, query2=search2) }}">Next</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled">
+            <a class="page-link" href="{{ url_for('additional_pages', page=page, query2=search2) }}">Next</a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endif %}
+  <br><br>
+{% endblock %}
