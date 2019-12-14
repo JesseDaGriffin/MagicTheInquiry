@@ -46,7 +46,20 @@
     </div>
     <!-- Buffer to push cards below link -->
     <div style="height: 170px;"></div>
-    <h1 class="text-center" style="width: 100%;">Card Count: {{ card_count }}</h1>
+    <h1 class="text-center" style="width: 100%;">
+      Card Count: {{ card_count }}
+    </h1>
+    {% if card_count > 100 %}
+      <div class="text-center" style="width: 100%;">
+        <h5>
+          Your deck is {{ card_count - 100 }} card(s) over the 100 card limit
+        </h5>
+        <h9>
+          Deck file can only contain 120 cards
+        </h9>
+      </div>
+
+    {% endif %}
     <textarea id='decklist' name="decklist" style="position:absolute; top:0; left:-5000px;">
       {% for card in decklist %}
         {{ decklist[card] }}
@@ -58,15 +71,18 @@
       </div>
       <div class="row mb-1">
         Cmc of Cards:
-        {% for cmc in range(16) %}
+        {% for cmc in range(9) %}
           <div class="col-sm text-center float-left">
             {{ cmc }}
+            {% if cmc == 8 %}
+              +
+            {% endif %}
           </div>
         {% endfor %}
       </div>
       <div class="row">
         Num of Cards:
-        {% for cmc in range(16) %}
+        {% for cmc in range(9) %}
           <div class="col-sm text-center">
             {{ cmccount[cmc] }}
           </div>
@@ -74,7 +90,7 @@
       </div>
     </div>
     {% for type in types %}
-      <h2 class="ml-5">{{ type }}:</h2>
+      <h2 class="ml-5">{{ type }} ({{ typecount[type] }}):</h2>
       <div class="row deck-row pr-5">
         {% if type != "Other" %}
           {% for card in sortedcards %}

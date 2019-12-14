@@ -28,8 +28,9 @@ def main():
     # rna
     # grn
     # Change the contents of this array to the sets you would like to scrape for
-    # rav oldest set
-    sets = ['shm', 'mor', 'lrw', 'fut', 'plc', 'tsp', 'csp', 'dis', 'gpt', 'rav']
+    # inv oldest set
+    sets = ['pcy', 'nem', 'mmq', '6ed', 'ulg', 'usg', 'uds', 'exo', 'sth', 'tmp', '5ed']
+    #['9ed', 'sok', 'bok', 'chk', '5dn', 'dst', 'mrd', '8ed', 'scg', 'lgn', 'ons', 'jud', 'tor', 'ody', 'apc', '7ed', 'pls', 'inv']
     cards_saved = 0
     for mtg_set in sets:
         # Webpage for scraping

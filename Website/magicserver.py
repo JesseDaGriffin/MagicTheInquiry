@@ -20,6 +20,20 @@ app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 
+def opendeck():
+    # Open pickle file representing the deck
+    try:
+        pickle_in = open("deck.pickle", "rb")
+        deck = pickle.load(pickle_in)
+        pickle_in.close()
+        print("pickle open")
+    except Exception as e:
+        print("except")
+        deck = {}
+
+    return deck
+
+
 def ordering(dictionary):
     """Dictionary passed in will be passed to a list and then Sorted.  List is then
     converted to OrderedDict and returned"""
@@ -194,14 +208,7 @@ def additional_pages(page, query2):
         results = zip(name, img, card_type, cmc)
 
     # Open deck to show how many of returned cards are in it
-    try:
-        pickle_in = open("deck.pickle", "rb")
-        deck = pickle.load(pickle_in)
-        pickle_in.close()
-        print("pickle open")
-    except Exception as e:
-        print("except")
-        deck = {}
+    deck = opendeck()
 
     return render_template('resultspage.html', page=page2, query="", search2=query2, results=results, index=current_page, total=page_count, urls=urls, deck=deck)
 
@@ -292,20 +299,16 @@ def results(page):
     for i in range(len(name)):
         # If a core set, slightly different url, add set code after setname
         year = set_name[i][-2] + set_name[i][-1]
+        print(set_name[i])
         if "Magic 20" in set_name[i]:
             urls[name[i]] = tcgurl + set_name[i].replace(' ', '-').replace(',', '').replace(':', '').replace('.', '').replace(' //', '') + '-m' + year + '/' + name[i].replace(' //', '').replace(' ', '-').replace(',', '').replace(':', '').replace('.', '')
+        elif "Duel Decks Anthology" in set_name[i]:
+            urls[name[i]] = tcgurl + set_name[i].replace(' Anthology:', '').replace(' ', '-').replace(',', '').replace(':', '').replace('.', '').replace(' //', '') + '/' + name[i].replace(' //', '').replace(' ', '-').replace(',', '').replace(':', '').replace('.', '')
         else:
             urls[name[i]] = tcgurl + set_name[i].replace(' ', '-').replace(',', '').replace(':', '').replace('.', '').replace(' //', '') + '/' + name[i].replace(' //', '').replace(' ', '-').replace(',', '').replace(':', '').replace('.', '')
 
     # Open deck to show how many of returned cards are in it
-    try:
-        pickle_in = open("deck.pickle", "rb")
-        deck = pickle.load(pickle_in)
-        pickle_in.close()
-        print("pickle open")
-    except Exception as e:
-        print("except")
-        deck = {}
+    deck = opendeck()
 
     # Send empty results if no cards return from query
     if not name and not img:
@@ -349,14 +352,7 @@ def success():
     error = 0
 
     # Open pickle file representing the deck
-    try:
-        pickle_in = open("deck.pickle", "rb")
-        deck = pickle.load(pickle_in)
-        pickle_in.close()
-        print("pickle open")
-    except Exception as e:
-        print("except")
-        deck = {}
+    deck = opendeck()
 
     # Find number of cards in deck
     cardlist = []
@@ -366,7 +362,7 @@ def success():
     # Set restrictions on what can go in a deck
     # Only 100 cards permited and a max of 4 of a specific card
     # Basic lands are an exception as you can have as many as you want
-    if sum(cardlist) + int(quantity) <= 100:
+    if sum(cardlist) + int(quantity) <= 120:
         if card_name in deck:
             if deck[card_name][0] + int(quantity) <= 4 or "Basic Land" in ctype:
                 deck[card_name][0] += int(quantity)
@@ -391,14 +387,7 @@ def deck():
     print("Someone is viewing their deck")
 
     # Open pickle file (deck)
-    try:
-        pickle_in = open("deck.pickle", "rb")
-        deck = pickle.load(pickle_in)
-        pickle_in.close()
-        print("pickle open")
-    except Exception as e:
-        print("except")
-        deck = {}
+    deck = opendeck()
 
     # Find number of cards in deck
     card_count = 0
@@ -415,7 +404,7 @@ def deck():
         if int(deck[card][3].replace('cmc', '')) > highestcmc:
             highestcmc = int(deck[card][3].replace('cmc', ''))
 
-    for i in range(16):
+    for i in range(9):
         cmccount[i] = 0
 
     sortedcards = []
@@ -423,15 +412,33 @@ def deck():
 
     for card in sorted(cmcalphalist):
         sortedcards.append(card[1])
-        cmccount[card[0]] += 1
-        totalcmc += card[0]
+        if "Land" not in deck[card[1]][2]:
+            if card[0] < 9:
+                cmccount[card[0]] += 1
+            else:
+                cmccount[8] += 1
+            totalcmc += card[0]
 
     avgcmc = round(float(totalcmc / len(cmcalphalist)), 2)
 
     # Pass in array of types for the cards to be sorted into
     types = ['Creature', 'Instant', 'Sorcery', 'Enchantment', 'Artifact', 'Planeswalker', 'Land', 'Other']
 
-    return render_template('deck.html', deck=deck, types=types, card_count=card_count, decklist=decklist, sortedcards=sortedcards, cmccount=cmccount, avgcmc=avgcmc)
+    # Gather number of cards per types
+    typecount = {}
+
+    for tp in types:
+        for card in deck:
+            # print(card)
+            if tp in deck[card][2]:
+                try:
+                    typecount[tp] += deck[card][0]
+                except Exception as e:
+                    typecount[tp] = deck[card][0]
+        if tp not in typecount:
+            typecount[tp] = 0
+
+    return render_template('deck.html', deck=deck, types=types, card_count=card_count, decklist=decklist, sortedcards=sortedcards, cmccount=cmccount, avgcmc=avgcmc, typecount=typecount)
 
 
 # Route for deleting a card from deck page
