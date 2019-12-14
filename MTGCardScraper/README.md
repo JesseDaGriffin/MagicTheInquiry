@@ -7,7 +7,7 @@ Program Description:
     the program. To change what set to scrape for, change the
     variable "mtg_set". Currently, the program is only scraping
     10 sets at a time. You can find the set codes for more sets
-    at 'https://scryfall.com/sets'.The program will request the
+    at 'https://scryfall.com/sets'. The program will request the
     Scryfall page of the set given and save the name of all the
     cards. Finally, it will use the api to save the details of
     each card to a SQL database.
