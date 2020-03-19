@@ -29,8 +29,8 @@ def main():
     # grn
     # Change the contents of this array to the sets you would like to scrape for
     # inv oldest set
-    sets = ['pcy', 'nem', 'mmq', '6ed', 'ulg', 'usg', 'uds', 'exo', 'sth', 'tmp', '5ed']
-    #['9ed', 'sok', 'bok', 'chk', '5dn', 'dst', 'mrd', '8ed', 'scg', 'lgn', 'ons', 'jud', 'tor', 'ody', 'apc', '7ed', 'pls', 'inv']
+    sets = ['por', 'wth']
+    #['vis', 'mir', 'all', 'hml', 'ice', '4ed', 'fem', 'drk', 'leg', 'atq', 'arn']
     cards_saved = 0
     for mtg_set in sets:
         # Webpage for scraping
@@ -49,7 +49,7 @@ def main():
             skip = False
             # Use Scryfall api to retrieve info about each card
             searched_card = searchCard(card.get_text())
-            time.sleep(.1)
+            # time.sleep(.1)
             card_response = requests.get(searched_card)
             if card_response:
                 # Format response to json

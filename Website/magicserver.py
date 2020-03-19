@@ -1,5 +1,5 @@
 import pymysql
-from flask import Flask, render_template, url_for, request, session
+from flask import Flask, render_template, url_for, request, session, redirect
 from jinja2 import Template
 import whoosh
 from whoosh.index import create_in
@@ -260,7 +260,7 @@ def results(page):
         query = query + " colors" + colors
 
     # If at least one color selected, add to stats and make new graph
-    if "color" in query:
+    if "color" in query and "color" not in searchtext:
         mana_graph(query, color, "colors", "stats/color.json", "Top Colors", "static/charts/mana_color_chart.svg", custom_style)
         print("updated color file")
 
@@ -419,7 +419,10 @@ def deck():
                 cmccount[8] += 1
             totalcmc += card[0]
 
-    avgcmc = round(float(totalcmc / len(cmcalphalist)), 2)
+    if len(cmcalphalist) != 0:
+        avgcmc = round(float(totalcmc / len(cmcalphalist)), 2)
+    else:
+        avgcmc = 0
 
     # Pass in array of types for the cards to be sorted into
     types = ['Creature', 'Instant', 'Sorcery', 'Enchantment', 'Artifact', 'Planeswalker', 'Land', 'Other']
@@ -457,12 +460,7 @@ def delete():
     error = 0
 
     # Open pickle file (deck)
-    try:
-        pickle_in = open("deck.pickle", "rb")
-        deck = pickle.load(pickle_in)
-        pickle_in.close()
-    except Exception as e:
-        error = 1
+    deck = opendeck()
 
     # Delete card from deck
     try:
@@ -481,7 +479,8 @@ def delete():
     except Exception as e:
         error = 1
 
-    return render_template('delete.html', name=card_name, error=error, back=request.referrer)
+    return redirect(url_for("deck"))
+    # return render_template('delete.html', name=card_name, error=error, back=request.referrer)
 
 
 # Header

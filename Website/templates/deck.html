@@ -96,9 +96,15 @@
           {% for card in sortedcards %}
             {% for i in range(deck[card][0]) %}
               {% if type in deck[card][2] %}
-                <form action="{{ url_for('delete') }}">
-                  <button type="submit" name=name value="{{ card }}" style="background:transparent; border:none; color:transparent;"><img class="deck-card" src="{{ deck[card][1] }}" alt="Image"></button>
-                </form>
+                {% if type == "Creature" %}
+                  <form action="{{ url_for('delete') }}">
+                    <button type="submit" name=name value="{{ card }}" style="background:transparent; border:none; color:transparent;"><img class="deck-card" src="{{ deck[card][1] }}" alt="Image"></button>
+                  </form>
+                {% elif "Creature" not in deck[card][2] %}
+                  <form action="{{ url_for('delete') }}">
+                    <button type="submit" name=name value="{{ card }}" style="background:transparent; border:none; color:transparent;"><img class="deck-card" src="{{ deck[card][1] }}" alt="Image"></button>
+                  </form>
+                {% endif %}
               {% endif %}
             {% endfor %}
           {% endfor %}
