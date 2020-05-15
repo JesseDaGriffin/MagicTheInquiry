@@ -2,8 +2,8 @@ Programmer: Jesse Griffin
 Magic the Inquiry Card Search Website
 
 Program Description:
-    This program will run the server for our Final Projects
-    website. Once ran, it will ask the user if they want to
+    This program will run the server for an MTG cardsearch database.
+    Once ran, it will ask the user if they want to
     index their database. If they have our SQL database
     set up, the server will save all tuples in the SQL
     database into the whoosh database. If none is chosen,
