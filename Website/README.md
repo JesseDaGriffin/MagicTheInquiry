@@ -1,7 +1,7 @@
-Programmer: Jesse Griffin
-Magic the Inquiry Card Search Website
+Programmer: Jesse Griffin  
+Magic the Inquiry Card Search Website  
 
-Program Description:
+Program Description:  
     This program will run the server for an MTG cardsearch database.
     Once ran, it will ask the user if they want to
     index their database. If they have our SQL database
@@ -11,17 +11,17 @@ Program Description:
     with our project. At this point, the server will just alert
     when certain events happen on the site.
     
-Preview:
-    Home Page
-    ![](images/HomePage.png)
-    Results Page
-    ![](images/ResultsPage.png)
-    Deckbuilder Page
-    ![](images/DeckbuilderPage.png)
-    Stats Page
-    ![](images/StatsPage.png)
+Preview:  
+    Home Page  
+    ![](images/HomePage.png)  
+    Results Page  
+    ![](images/ResultsPage.png)  
+    Deckbuilder Page  
+    ![](images/DeckbuilderPage.png)  
+    Stats Page  
+    ![](images/StatsPage.png)  
 
-Run Program:
+Run Program:  
     Must have database set up before program is ran. A db has
     been turned in with the program that should be created first.
 
