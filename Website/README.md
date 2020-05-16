@@ -10,6 +10,10 @@ Program Description:
     the program will use the index already created and submitted
     with our project. At this point, the server will just alert
     when certain events happen on the site.
+    
+Preview:
+    Home Page
+    ![](images/HomePage.png)
 
 Run Program:
     Must have database set up before program is ran. A db has
