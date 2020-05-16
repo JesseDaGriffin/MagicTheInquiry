@@ -14,6 +14,12 @@ Program Description:
 Preview:
     Home Page
     ![](images/HomePage.png)
+    Results Page
+    ![](images/ResultsPage.png)
+    Deckbuilder Page
+    ![](images/DeckbuilderPage.png)
+    Stats Page
+    ![](images/StatsPage.png)
 
 Run Program:
     Must have database set up before program is ran. A db has
