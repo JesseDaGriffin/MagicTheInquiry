@@ -1,8 +1,7 @@
-Programmer: Jesse Griffin
-Magic the Gathering Card Web Scraper
-Professor: Ben McCamish
+Programmer: Jesse Griffin  
+Magic the Gathering Card Web Scraper  
 
-Program Description:
+Program Description:  
     This program will scrape 'scryfall.com' for the sets given in
     the program. To change what set to scrape for, change the
     variable "mtg_set". Currently, the program is only scraping
@@ -12,7 +11,7 @@ Program Description:
     cards. Finally, it will use the api to save the details of
     each card to a SQL database.
 
-Run Program:
+Run Program:  
     Must have database set up before program is ran. Data has
     been turned in with the program that should be created first.
     Database must be named 'MtgDb' or additional code must be 
